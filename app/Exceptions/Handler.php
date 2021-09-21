@@ -2,8 +2,12 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +40,20 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Record not found'
+                ], 404);
+            }
+        });
+
+        $this->renderable(function (JWTException $e, $request) {
+            return response()->json([
+                'message' => "Unauthenticated"
+            ], 401);
         });
     }
 }

@@ -27,15 +27,15 @@ class JWTMiddleware extends BaseMiddleware
             if ($e instanceof TokenInvalidException) {
                 return response()->json([
                     'status' => 'Token is invalid'
-                ]);
+                ], 400);
             } elseif ($e instanceof TokenExpiredException) {
                 return response()->json([
                     'status' => 'Token is Expired'
-                ]);
+                ], 400);
             } else {
                 return response()->json([
                     'status' => 'Authorization Token not found'
-                ]);
+                ], 400);
             }
         }
 
