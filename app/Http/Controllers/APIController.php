@@ -23,7 +23,7 @@ class APIController extends Controller
 
         // send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->getMessageBag()], 200);
+            return response()->json(['error' => $validator->getMessageBag()], 400);
         }
 
         $user = User::create([
@@ -36,7 +36,7 @@ class APIController extends Controller
             'success' => true,
             'message' => 'User created successfully',
             'data' => $user
-        ], Response::HTTP_OK);
+        ], Response::HTTP_CREATED);
     }
 
     public function authenticate(Request $request)
@@ -89,8 +89,8 @@ class APIController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'User has been logged out'
-            ]);
-        } catch( JWTException $exception) {
+            ], 200);
+        } catch (JWTException $exception) {
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, user cannot be logged out'
