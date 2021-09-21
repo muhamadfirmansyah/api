@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\APIController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -37,9 +38,21 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::put('/data-movie/{movie}', [MovieController::class, 'update']);
     Route::delete('/data-movie/{movie}', [MovieController::class, 'destroy']);
 
+    // Games
+    Route::post('/data-game', [GameController::class, 'store']);
+    Route::put('/data-game/{game}', [GameController::class, 'update']);
+    Route::delete('/data-game/{game}', [GameController::class, 'destroy']);
+
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/update/{product}', [ProductController::class, 'update']);
     Route::delete('/products/delete/{product}', [ProductController::class, 'destroy']);
+});
+
+
+Route::post('/upload-image', function() {
+    $file = request()->file('image');
+
+    return $file->getClientOriginalName();
 });
